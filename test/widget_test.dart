@@ -34,4 +34,43 @@ void main() {
     expect(find.text('Programme'), findsOneWidget);
     expect(find.text('Match du jour'), findsOneWidget);
   });
+
+  testWidgets('login screen validates user input and authenticates', (tester) async {
+    await tester.pumpWidget(const LiveStreamApp());
+
+    expect(find.text('Connexion'), findsOneWidget);
+
+    await tester.tap(find.text('Se connecter'));
+    await tester.pump();
+
+    expect(find.text('Saisissez une adresse e-mail valide.'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField).at(0), 'alice@streamhub.app');
+    await tester.enterText(find.byType(TextField).at(1), 'password123');
+    await tester.tap(find.text('Se connecter'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Chaînes'), findsOneWidget);
+  });
+
+  testWidgets('channel detail opens player screen', (tester) async {
+    await tester.pumpWidget(const LiveStreamApp());
+
+    await tester.enterText(find.byType(TextField).at(0), 'alice@streamhub.app');
+    await tester.enterText(find.byType(TextField).at(1), 'password123');
+    await tester.tap(find.text('Se connecter'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Sport Live'), findsOneWidget);
+
+    await tester.tap(find.text('Sport Live'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Regarder le flux'), findsOneWidget);
+
+    await tester.tap(find.text('Regarder le flux'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Sport Live live'), findsOneWidget);
+  });
 }
